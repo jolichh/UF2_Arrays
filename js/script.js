@@ -1,13 +1,22 @@
 			
-// POKEMONS
+// Variables globales
 
 let dades;
-
 let pokeArray = new Array();
 let muniArray = new Array();
+let peliArray = new Array();
+let meteoArray = new Array();
+let tablaData = new Object();	//se usa para mostrar tabla vertical
+let maxLength;
 
-let superArray;
-
+let superArray = {
+	pokemon: pokeArray,
+	minicipis: muniArray,
+	pelicules: peliArray,
+	meteorits: meteoArray
+}
+	
+  
 // POKEMONS
 fetch("js/data/pokemon.json")
 .then(function(response) { return response.json()})
@@ -16,15 +25,12 @@ fetch("js/data/pokemon.json")
 	
 	for (var i = 0; i < dades.length; i++) {
 		pokeArray.push(dades[i].name);
-		//console.log(dades[i].name);
 	}
 	console.log("pokemons: "+pokeArray.length);
 })
 .catch(function (err) {
 	console.log(err);
 });
-
-
 
 // MUNICIPIS
 fetch("js/data/municipis.json")
@@ -34,28 +40,12 @@ fetch("js/data/municipis.json")
 	
 	for (var i = 0; i < dades.length; i++) {
 		muniArray.push(dades[i].municipi_nom);
-		//console.log(dades[i].name);
 	}
-	//console.log(dades)
 	console.log("municipis: "+dades.length);
+})
+.catch(function (err) {
+	console.log(err);
 });
-
-superArray = {
-	pokemon: pokeArray,
-	minicipis: muniArray
-}
-
-console.table(superArray);
-
-//crear objeto para guardar los datos del print
-let datosSet = new Object();
-let arrays = [pokeArray, muniArray];
-let arrayMasLargo = Math.max(...arrays.map(arr => arr.length));
-console.log("array más largo con length: "+ arrayMasLargo);
-// for (let i = 0; i < superArray.length; i++) {
-// 	for (let j = 0; j < superArray[i])
-	
-// }
 
 // METEORITS
 fetch("js/data/earthMeteorites.json")
@@ -63,6 +53,48 @@ fetch("js/data/earthMeteorites.json")
 .then((data) => {
 	dades = data;		
 	
-	//console.log(dades)
-	console.log("meteorit 1 : "+dades[0].name)
+	for (var i = 0; i < dades.length; i++) {
+		meteoArray.push(dades[i].name);
+	}
+	console.log("meteorit 1 : "+dades[5].name)
+})
+.catch(function (err) {
+	console.log(err);
 });
+
+// MOVIES
+fetch("js/data/movies.json")
+.then((response) => response.json())
+.then((data) => {
+	dades = data.movies;		
+	
+	for (var i = 0; i < dades.length; i++) {
+		peliArray.push(dades[i].title);
+	}
+	console.log(dades[8].title);
+
+	//llamada desde ultimo fetch para asegurarse que no hay undefineds
+	mostrarConsola();
+
+})
+.catch(function (err) {
+	console.log(err);
+});
+
+function mostrarConsola() {
+	maxLength = Math.max(
+		superArray.pokemon.length,
+		superArray.minicipis.length,
+		superArray.pelicules.length,
+		superArray.meteorits.length
+	);
+
+	// Crear un array de objetos para representar la tabla
+	tablaData = Array.from({ length: maxLength }, (_, index) => ({
+		Pokemon: superArray.pokemon[index] || '',
+		Minicipis: superArray.minicipis[index] || '',
+		Pel·licules: superArray.pelicules[index] || '',
+		EarthMeteorite: superArray.meteorits[index] || ''
+	}));
+	console.table(tablaData);
+}
