@@ -16,70 +16,39 @@ let superArray = {
 	meteorits: meteoArray
 }
 	
-  
-// POKEMONS
-fetch("js/data/pokemon.json")
-.then(function(response) { return response.json()})
-.then(function(data) {
-	dades = data.pokemon;
-	
-	for (var i = 0; i < dades.length; i++) {
-		pokeArray.push(dades[i].name);
+fetchingData();
+
+async function fetchingData() {
+	try {
+		const responsePokemon = await fetch("js/data/pokemon.json");
+    const dataPokemon = await responsePokemon.json();
+    dades = dataPokemon.pokemon;
+    pokeArray.push(...dades.map(pokemon => pokemon.name));
+    console.log("Pokemons:", pokeArray.length);
+
+    const responseMunicipis = await fetch("js/data/municipis.json");
+    const dataMunicipis = await responseMunicipis.json();
+    dades = dataMunicipis.elements;
+    muniArray.push(...dades.map(element => element.municipi_nom));
+    console.log("Municipis:", dades.length);
+
+    const responseMeteorits = await fetch("js/data/earthMeteorites.json");
+    const dataMeteorits = await responseMeteorits.json();
+    dades = dataMeteorits;
+    meteoArray.push(...dades.map(meteorit => meteorit.name));
+    console.log("Meteorits 1:", dades[5].name);
+
+    const responseMovies = await fetch("js/data/movies.json");
+    const dataMovies = await responseMovies.json();
+    dades = dataMovies.movies;
+    peliArray.push(...dades.map(movie => movie.title));
+    console.log("Movies:", dades[8].title);
+
+    mostrarConsola();
+	} catch(error) {
+		console.log("Error en fetch data", error);
 	}
-	console.log("pokemons: "+pokeArray.length);
-})
-.catch(function (err) {
-	console.log(err);
-});
-
-// MUNICIPIS
-fetch("js/data/municipis.json")
-.then(function (response) { return response.json() })
-.then(function(data) {
-	dades = data.elements;		
-	
-	for (var i = 0; i < dades.length; i++) {
-		muniArray.push(dades[i].municipi_nom);
-	}
-	console.log("municipis: "+dades.length);
-})
-.catch(function (err) {
-	console.log(err);
-});
-
-// METEORITS
-fetch("js/data/earthMeteorites.json")
-.then((response) => response.json())
-.then((data) => {
-	dades = data;		
-	
-	for (var i = 0; i < dades.length; i++) {
-		meteoArray.push(dades[i].name);
-	}
-	console.log("meteorit 1 : "+dades[5].name)
-})
-.catch(function (err) {
-	console.log(err);
-});
-
-// MOVIES
-fetch("js/data/movies.json")
-.then((response) => response.json())
-.then((data) => {
-	dades = data.movies;		
-	
-	for (var i = 0; i < dades.length; i++) {
-		peliArray.push(dades[i].title);
-	}
-	console.log(dades[8].title);
-
-	//llamada desde ultimo fetch para asegurarse que no hay undefineds
-	mostrarConsola();
-
-})
-.catch(function (err) {
-	console.log(err);
-});
+}
 
 function mostrarConsola() {
 	maxLength = Math.max(
