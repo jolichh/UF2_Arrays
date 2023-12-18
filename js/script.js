@@ -1,6 +1,5 @@
-			
-// Variables globales
-
+// Excercici inical	
+// Variables globales exercici inicial
 let dades;
 let pokeArray = new Array();
 let muniArray = new Array();
@@ -15,41 +14,39 @@ let superArray = {
 	pelicules: peliArray,
 	meteorits: meteoArray
 }
-	
-fetchingData();
 
+fetchingData();
 async function fetchingData() {
 	try {
 		const responsePokemon = await fetch("js/data/pokemon.json");
-    const dataPokemon = await responsePokemon.json();
-    dades = dataPokemon.pokemon;
-    pokeArray.push(...dades.map(pokemon => pokemon.name));
-    console.log("Pokemons:", pokeArray.length);
+		const dataPokemon = await responsePokemon.json();
+		dades = dataPokemon.pokemon;
+		pokeArray.push(...dades.map(pokemon => pokemon.name));
+		console.log("Pokemons:", pokeArray.length);
 
-    const responseMunicipis = await fetch("js/data/municipis.json");
-    const dataMunicipis = await responseMunicipis.json();
-    dades = dataMunicipis.elements;
-    muniArray.push(...dades.map(element => element.municipi_nom));
-    console.log("Municipis:", dades.length);
+		const responseMunicipis = await fetch("js/data/municipis.json");
+		const dataMunicipis = await responseMunicipis.json();
+		dades = dataMunicipis.elements;
+		muniArray.push(...dades.map(element => element.municipi_nom));
+		console.log("Municipis:", dades.length);
 
-    const responseMeteorits = await fetch("js/data/earthMeteorites.json");
-    const dataMeteorits = await responseMeteorits.json();
-    dades = dataMeteorits;
-    meteoArray.push(...dades.map(meteorit => meteorit.name));
-    console.log("Meteorits 1:", dades[5].name);
+		const responseMeteorits = await fetch("js/data/earthMeteorites.json");
+		const dataMeteorits = await responseMeteorits.json();
+		dades = dataMeteorits;
+		meteoArray.push(...dades.map(meteorit => meteorit.name));
+		console.log("Meteorits 1:", dades[5].name);
 
-    const responseMovies = await fetch("js/data/movies.json");
-    const dataMovies = await responseMovies.json();
-    dades = dataMovies.movies;
-    peliArray.push(...dades.map(movie => movie.title));
-    console.log("Movies:", dades[8].title);
+		const responseMovies = await fetch("js/data/movies.json");
+		const dataMovies = await responseMovies.json();
+		dades = dataMovies.movies;
+		peliArray.push(...dades.map(movie => movie.title));
+		console.log("Movies:", dades[8].title);
 
-    mostrarConsola();
+		mostrarConsola();
 	} catch(error) {
 		console.log("Error en fetch data", error);
 	}
 }
-
 function mostrarConsola() {
 	maxLength = Math.max(
 		superArray.pokemon.length,
@@ -66,4 +63,43 @@ function mostrarConsola() {
 		EarthMeteorite: superArray.meteorits[index] || ''
 	}));
 	console.table(tablaData);
+}
+
+// EXERCICI 1
+// Variables globales exercici 1
+let objetoPokemonArray = new Array();
+let col = 4;
+// Part 1
+inicialitzaPagina();
+function inicialitzaPagina() {
+	
+	// POKEMONS
+	fetch("js/data/pokemon.json")
+	.then(function(response) { return response.json()})
+	.then(function(data) {
+		dades = data.pokemon;
+		let div = document.getElementById("container-tabla");
+		let tabla = `<table>`;
+
+		for (var i = 0; i < dades.length; i++) {
+			tabla += `<tr>`;
+			objetoPokemonArray.push(dades[i]);
+			tabla += `<td>${objetoPokemonArray[i].id}  </td>`;
+			tabla += `<td><img src="${objetoPokemonArray[i].img}"></td>`;
+			tabla += `<td>${objetoPokemonArray[i].name}</td>`;
+			tabla += `<td>${objetoPokemonArray[i].weight}</td>`;
+			
+		}
+		tabla += `</tr>`;
+		tabla += `</table>`;
+		div.innerHTML = tabla;
+
+		console.log("pokemons: "+objetoPokemonArray.length);
+		})
+	.catch(function (err) {
+		console.log(err);
+	});
+}
+function recargaPagina() {
+	location.reload();
 }
