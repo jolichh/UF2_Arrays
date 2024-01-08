@@ -79,8 +79,13 @@ function inicialitzaPagina() {
 	.then(function(data) {
 		dades = data.pokemon;
 		let div = document.getElementById("container-tabla");
-		let tabla = `<table>`;
-
+		let tabla = `<table id="tabla">`;
+		tabla += `<tr>`;
+		tabla += `<td>#</td>`;
+		tabla += `<td>image</td>`;
+		tabla += `<td>name</td>`;
+		tabla += `<td>weight</td>`;
+		tabla += `<tr>`;
 		for (var i = 0; i < dades.length; i++) {
 			tabla += `<tr>`;
 			objetoPokemonArray.push(dades[i]);
@@ -102,4 +107,34 @@ function inicialitzaPagina() {
 }
 function recargaPagina() {
 	location.reload();
+}
+function orderList(orden) {
+	pokeOrdenado = [...objetoPokemonArray];
+	//orden ascendente = alfabetico
+	if (orden == 'asc') {
+		pokeOrdenado.sort();
+	} else if (orden == 'desc') {
+		pokeOrdenado.reverse();
+	} else {
+		console.log("falla el tipo de orden al ordenar");
+	}
+	let div = document.getElementById("container-tabla");
+	let tabla = `<table id="tabla">`;
+	tabla += `<tr>`;
+	tabla += `<td>#</td>`;
+	tabla += `<td>image</td>`;
+	tabla += `<td>name</td>`;
+	tabla += `<td>weight</td>`;
+	tabla += `<tr>`;
+	for (var i = 0; i < pokeOrdenado.length; i++) {
+		tabla += `<tr>`;
+		tabla += `<td>${pokeOrdenado[i].id}  </td>`;
+		tabla += `<td><img src="${pokeOrdenado[i].img}"></td>`;
+		tabla += `<td>${pokeOrdenado[i].name}</td>`;
+		tabla += `<td>${pokeOrdenado[i].weight}</td>`;
+		
+	}
+	tabla += `</tr>`;
+	tabla += `</table>`;
+	div.innerHTML = tabla;
 }
