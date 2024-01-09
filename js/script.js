@@ -69,10 +69,17 @@ function mostrarConsola() {
 // Variables globales exercici 1
 let objetoPokemonArray = new Array();
 let col = 4;
+let objetoPokemonSinKg = new Array();
+function sinKg() {
+	objetoPokemonSinKg = objetoPokemonArray.map(function (alumno) {
+		return { edad: alumno.edad, peso: parseInt(alumno.peso) };
+	});
+}
+
+
 // Part 1
 inicialitzaPagina();
-function inicialitzaPagina() {
-	
+function inicialitzaPagina() {	
 	// POKEMONS
 	fetch("js/data/pokemon.json")
 	.then(function(response) { return response.json()})
@@ -100,16 +107,23 @@ function inicialitzaPagina() {
 		div.innerHTML = tabla;
 
 		console.log("pokemons: "+objetoPokemonArray.length);
+		console.log(objetoPokemonArray);
 		})
 	.catch(function (err) {
 		console.log(err);
 	});
+
+	sinKg();
 }
+
 function recargaPagina() {
 	location.reload();
 }
+
+//ordena ascendente o descendente
 function orderList(orden) {
 	pokeOrdenado = [...objetoPokemonArray];
+
 	//orden ascendente = alfabetico
 	if (orden == 'asc') {
 		pokeOrdenado.sort();
@@ -118,6 +132,47 @@ function orderList(orden) {
 	} else {
 		console.log("falla el tipo de orden al ordenar");
 	}
+	
+	printList(pokeOrdenado);
+}
+
+//busqueda per coincidencia de nom
+function searchList() {
+	pokeBuscar = [...objetoPokemonArray];
+
+	let condicionBusqueda = prompt("Buscar:");
+	condicionBusqueda.toLocaleLowerCase();
+
+	let cumpleCondicionPoke = new Array();
+	pokeBuscar.forEach(element => {
+		if(element.name.toLocaleLowerCase().includes(condicionBusqueda)) {
+			cumpleCondicionPoke.push(element);
+		}
+	});
+
+	printList(cumpleCondicionPoke);		
+}
+
+function calcMitjana(dato) {
+	let mitjana = 0;
+	let obj = new Array();
+
+	if (dato == 'pokemon') {
+		obj = [...objetoPokemonSinKg];
+		console.log(objetoPokemonArray[1].weight);
+		console.log(objetoPokemonSinKg[1].weight);
+		console.log(obj[1].weight);
+		obj.forEach(element => {
+			mitjana += element.weight;
+		});
+		alert(mitjana);
+	} else {
+		console.log("algo ha ido mal en calcMitjana");
+	}
+}
+
+//crea la tabla y la muestra en el html
+function printList(lista) {
 	let div = document.getElementById("container-tabla");
 	let tabla = `<table id="tabla">`;
 	tabla += `<tr>`;
@@ -126,12 +181,12 @@ function orderList(orden) {
 	tabla += `<td>name</td>`;
 	tabla += `<td>weight</td>`;
 	tabla += `<tr>`;
-	for (var i = 0; i < pokeOrdenado.length; i++) {
+	for (var i = 0; i < lista.length; i++) {
 		tabla += `<tr>`;
-		tabla += `<td>${pokeOrdenado[i].id}  </td>`;
-		tabla += `<td><img src="${pokeOrdenado[i].img}"></td>`;
-		tabla += `<td>${pokeOrdenado[i].name}</td>`;
-		tabla += `<td>${pokeOrdenado[i].weight}</td>`;
+		tabla += `<td>${lista[i].id}  </td>`;
+		tabla += `<td><img src="${lista[i].img}"></td>`;
+		tabla += `<td>${lista[i].name}</td>`;
+		tabla += `<td>${lista[i].weight}</td>`;
 		
 	}
 	tabla += `</tr>`;
