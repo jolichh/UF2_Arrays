@@ -47,6 +47,7 @@ async function fetchingData() {
 		console.log("Error en fetch data", error);
 	}
 }
+//RECUERDA DESCOMENTAR AQUI!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function mostrarConsola() {
 	maxLength = Math.max(
 		superArray.pokemon.length,
@@ -62,7 +63,7 @@ function mostrarConsola() {
 		Pel·licules: superArray.pelicules[index] || '',
 		EarthMeteorite: superArray.meteorits[index] || ''
 	}));
-	console.table(tablaData);
+	//console.table(tablaData);
 }
 
 // EXERCICI 1
@@ -71,9 +72,13 @@ let objetoPokemonArray = new Array();
 let col = 4;
 let objetoPokemonSinKg = new Array();
 function sinKg() {
-	objetoPokemonSinKg = objetoPokemonArray.map(function (alumno) {
-		return { edad: alumno.edad, peso: parseInt(alumno.peso) };
+	objetoPokemonSinKg = [...objetoPokemonArray];
+	objetoPokemonSinKg.map(function (objetoPokemonArray) {
+		return { weight: parseInt(objetoPokemonArray.weight) };
 	});
+	console.log(objetoPokemonSinKg[1]);
+	console.log("sinKG length: "+ objetoPokemonSinKg.length);
+	console.log("sinKG weight: "+ objetoPokemonSinKg[3].weight);
 }
 
 
@@ -107,28 +112,36 @@ function inicialitzaPagina() {
 		div.innerHTML = tabla;
 
 		console.log("pokemons: "+objetoPokemonArray.length);
-		console.log(objetoPokemonArray);
+		//console.log(objetoPokemonArray);
+		sinKg(); //esto debe ir dentro para que cargue bien el orden de datos por el async
 		})
 	.catch(function (err) {
 		console.log(err);
 	});
-
-	sinKg();
+	
 }
 
 function recargaPagina() {
 	location.reload();
 }
 
-//ordena ascendente o descendente
+//ordena ascendente o descendente 
 function orderList(orden) {
 	pokeOrdenado = [...objetoPokemonArray];
 
 	//orden ascendente = alfabetico
 	if (orden == 'asc') {
-		pokeOrdenado.sort();
+		pokeOrdenado.sort(function(a,b){ 
+			if (a.name > b.name) { return 1};	//si es mayor +1
+			if (a.name < b.name) { return -1};	//es menor -1
+			return 0; //si es igual ni suma ni resta
+		});
 	} else if (orden == 'desc') {
-		pokeOrdenado.reverse();
+		pokeOrdenado.sort(function(a,b){ 
+			if (a.name < b.name) { return 1};	//si es menor +1
+			if (a.name > b.name) { return -1};	//es mayor -1
+			return 0; //si es igual ni suma ni resta
+		});
 	} else {
 		console.log("falla el tipo de orden al ordenar");
 	}
@@ -159,9 +172,9 @@ function calcMitjana(dato) {
 
 	if (dato == 'pokemon') {
 		obj = [...objetoPokemonSinKg];
-		console.log(objetoPokemonArray[1].weight);
-		console.log(objetoPokemonSinKg[1].weight);
-		console.log(obj[1].weight);
+		console.log("CON kg: "+objetoPokemonArray[1].weight);
+		console.log("SIN kg "+obj[1].weight)
+		console.log("MITJANA inici: "+mitjana);
 		obj.forEach(element => {
 			mitjana += element.weight;
 		});
