@@ -10,12 +10,19 @@
 </head>
 <body>
 	<div id="container">
-		
+
+		<select id="tipoLista" onchange="asignarValorLista(this.value)">
+			<option value="pokemon" selected>Pokemon</option>
+			<option value="municipi">Municipi</option>
+			<option value="pelicules">Pelicules</option>
+			<option value="meteorits">Meteorits</option>
+		</select>
+
 		<button onclick="recargaPagina()">Inicialitza tot de nou</button>
 		<button onclick="orderList('asc')">Ordenar ascendent</button>
 		<button onclick="orderList('desc')">Ordenar descendent</button>
 		<button onclick="searchList()">Buscar</button>
-		<button onclick="calcMitjana('pokemon')">Mitjana del valor afegit</button>
+		<button onclick="calcMitjana()">Mitjana del valor afegit</button>
 		<div id="container-tabla"></div>
 	</div>
 </body>
