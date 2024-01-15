@@ -90,7 +90,6 @@ function sinKg() {
 // 	console.log("sinKG length: "+ objetoPokemonSinKg.length);
 // 	console.log("sinKG weight: "+ objetoPokemonSinKg[3].weight);
 }
-
 function asignarValorLista(dato) {
 	valorLlista = dato;
 	console.log("valor llista: "+valorLlista);
@@ -170,7 +169,114 @@ function inicialitzaPagina() {
 		console.log(err);
 	});
 }
+function cargarGrafic() {
+	//mi chart
+	let arrayLabels = new Array();
+	let arrayDadesGraf = new Array();
+	let backgroundColor = new Array();
+	let borderColor = new Array();
+	let nomLabel = "";
 
+	console.log("valor llista al cargar Grafic: "+ valorLlista);
+	//cargar labels, datos y colores para el grafico
+	if (valorLlista == 'pokemon') {
+		nomLabel = "Tipus de pokemon";
+		obj = [...objetoPokemonArray];
+		obj.forEach(element => {
+			//puede tener varios tipos, array
+			element.type.forEach(tipo => {
+				if (!arrayLabels.includes(tipo)) {
+					arrayLabels.push(tipo);
+				}
+			})
+			// for (let i= 0; i<element.type.length; i++){
+			// 	if (!arrayLabels.includes(element.type[i])) {
+			// 		arrayLabels.push(element.type[i]);
+			// 	}
+			// }		
+		});
+		console.log(arrayLabels.length+" tipus de pokemon");
+	} 
+	else if (valorLlista == 'municipi') {		
+		nomLabel = "Comarca de municipi";
+		obj = [...objetoMunicipiArray];
+		obj.forEach(element => {
+			if (!arrayLabels.includes(element.comarca_nom)) {
+				arrayLabels.push(element.comarca_nom);
+			}
+		});
+		console.log(arrayLabels.length+" comarques totals");
+	}
+	else if (valorLlista == 'pelicules') {
+		obj = [...objetoPeliculaArray];
+		objGrafic = new Array();
+		obj.forEach(element => {
+			for (let i= 0; i<element.genres.length; i++){
+				if (!objGrafic.includes(element.genres[i])) {
+					objGrafic.push(element.type[i]);
+				}
+			}
+		});
+	}
+	else if (valorLlista == 'meteorits') {
+		obj = [...objetoMeteoritArray];
+		objGrafic = new Array();
+		obj.forEach(element => {
+			if (!objGrafic.includes(element.recclass)) {
+				objGrafic.push(element.recclass);
+			}
+		});
+	}
+	else {
+		console.log("Algo ha ido mal calculando el grafico");
+	}
+
+	//sacar datos
+	console.log("veces que entra a recorrer la objetos tabla "+obj.length);
+	for (let i = 0; i<arrayLabels.length; i++) {
+		arrayDadesGraf[i] = 0;
+		for (let j = 0; j<obj.length; j++) {
+			//si el elemento pertenece al tipo
+			
+			if (obj[j].type.includes(arrayLabels[i])) {
+				arrayDadesGraf[i] = arrayDadesGraf[i]+ 1;
+			}
+			
+		}
+	} 
+
+	//assignar color
+	arrayLabels.forEach(element=> {
+		let rrr = Math.floor(Math.random()*256);
+		let ggg = Math.floor(Math.random()*256);
+		let bbb = Math.floor(Math.random()*256);
+
+		backgroundColor.push('rgba('+rrr+','+ggg+','+bbb+', 0.2)');
+		borderColor.push("rgba("+rrr+','+ggg+','+bbb+')');
+		
+
+	})
+	
+	const ctx = document.getElementById('myChart');
+	const data = {
+		labels: arrayLabels,
+		datasets: [{
+			label: nomLabel,
+			data: arrayDadesGraf,
+			backgroundColor: backgroundColor,
+			borderColor: borderColor
+		}]
+		
+	};
+
+	const config = {
+		type: 'polarArea',
+		data: data,
+		options: {}
+	};
+	console.log(config);
+	new Chart(ctx, config);	
+}
 function recargaPagina() {
 	location.reload();
 }
@@ -367,6 +473,18 @@ function printList(lista) {
 		tabla += `<td>name</td>`;
 		tabla += `<td>Habitants</td>`;	
 	}
+	if (valorLlista === "pelicules") {
+		tabla += `<td>Title</td>`;
+		tabla += `<td>image</td>`;
+		tabla += `<td>year</td>`;
+		tabla += `<td>Rating</td>`;	
+	}
+	if (valorLlista === "meteorits") {
+		tabla += `<td>Id</td>`;
+		tabla += `<td>Recclass</td>`;
+		tabla += `<td>Name</td>`;
+		tabla += `<td>Mass</td>`;	
+	}
 	
 	tabla += `<tr>`;
 	for (var i = 0; i < lista.length; i++) {
@@ -402,4 +520,7 @@ function printList(lista) {
 	tabla += `</tr>`;
 	tabla += `</table>`;
 	div.innerHTML = tabla;
+	console.log("Cargar grafic desde printList");
+	cargarGrafic();
 }
+
