@@ -118,9 +118,9 @@ function inicialitzaPagina() {
 	.then(function(data) {
 		dades = data.pokemon;
 
-		for (var i = 0; i < dades.length; i++) {
-				objetoPokemonArray.push(dades[i]);
-		}
+		dades.forEach(element=>{
+			objetoPokemonArray.push(element);
+		})
 		//muestra tabla inicial
 		printList(objetoPokemonArray);
 		//sinKg debe ir dentro para que cargue bien el orden de datos por el async
@@ -135,9 +135,9 @@ function inicialitzaPagina() {
 	.then(function(response) { return response.json()})
 	.then(function(data) {
 		dades = data.elements;
-		for (var i = 0; i < dades.length; i++) {
-				objetoMunicipiArray.push(dades[i]);
-		}
+		dades.forEach(element=>{
+				objetoMunicipiArray.push(element);
+		})
 	})
 	.catch(function (err) {
 		console.log(err);
@@ -148,9 +148,9 @@ function inicialitzaPagina() {
 	.then(function(response) { return response.json()})
 	.then(function(data) {
 		dades = data.movies;
-		for (var i = 0; i < dades.length; i++) {
-				objetoPeliculaArray.push(dades[i]);
-		}
+		dades.forEach(element=>{
+				objetoPeliculaArray.push(element);
+		})
 	})
 	.catch(function (err) {
 		console.log(err);
@@ -161,9 +161,9 @@ function inicialitzaPagina() {
 	.then(function(response) { return response.json()})
 	.then(function(data) {
 		dades = data;
-		for (var i = 0; i < dades.length; i++) {
-				objetoMeteoritArray.push(dades[i]);
-		}
+		dades.forEach(element=>{
+				objetoMeteoritArray.push(element);
+		})
 	})
 	.catch(function (err) {
 		console.log(err);
@@ -188,12 +188,7 @@ function cargarGrafic() {
 				if (!arrayLabels.includes(tipo)) {
 					arrayLabels.push(tipo);
 				}
-			})
-			// for (let i= 0; i<element.type.length; i++){
-			// 	if (!arrayLabels.includes(element.type[i])) {
-			// 		arrayLabels.push(element.type[i]);
-			// 	}
-			// }		
+			})		
 		});
 		console.log(arrayLabels.length+" tipus de pokemon");
 	} 
@@ -232,20 +227,17 @@ function cargarGrafic() {
 	}
 
 	//sacar datos
-	console.log("veces que entra a recorrer la objetos tabla "+obj.length);
+	console.log("veces que entra a recorrer la objetos tabla "+obj.length);	
 	for (let i = 0; i<arrayLabels.length; i++) {
 		arrayDadesGraf[i] = 0;
-		for (let j = 0; j<obj.length; j++) {
-			//si el elemento pertenece al tipo
-			
-			if (obj[j].type.includes(arrayLabels[i])) {
+		obj.forEach(tipo => {
+			if (tipo.type.includes(arrayLabels[i])) {
 				arrayDadesGraf[i] = arrayDadesGraf[i]+ 1;
 			}
-			
-		}
+		})
 	} 
 
-	//assignar color
+	//assignar color para cada etiqueta
 	arrayLabels.forEach(element=> {
 		let rrr = Math.floor(Math.random()*256);
 		let ggg = Math.floor(Math.random()*256);
@@ -253,8 +245,6 @@ function cargarGrafic() {
 
 		backgroundColor.push('rgba('+rrr+','+ggg+','+bbb+', 0.2)');
 		borderColor.push("rgba("+rrr+','+ggg+','+bbb+')');
-		
-
 	})
 	
 	const ctx = document.getElementById('myChart');
@@ -265,8 +255,7 @@ function cargarGrafic() {
 			data: arrayDadesGraf,
 			backgroundColor: backgroundColor,
 			borderColor: borderColor
-		}]
-		
+		}]		
 	};
 
 	const config = {
