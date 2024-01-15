@@ -41,3 +41,52 @@ deixant comentades al JS. Per a cada funció fes un alert per comprovar el resul
 5. Fes una funció que es digui **calcMitjana()** que calculi la d’un valor numèric. Mitjançant el mètode **toFixed()** força que el resultat tingui només dos decimals. Fes un alert amb el resultat.
 
 6. Crea la funció **printList()** que creï una taula i mitjançant el DOM mostris el resultat en el div resultat
+
+## Part 2. Creem un gràfic
+A través de la llibreria Chart.js crearem un gràfic que ens mostrarà els pokemons en funció del seu tipus.
+
+Per a fer-ho has de seguir els següents passos:
+1. Afegeix la llibreria al <head> de l’index.html
+```
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+```
+2. Afegeix el div on anirà al gràfic
+```<div class="chart-container" style="position: relative; width:700px">
+<canvas id="myChart"></canvas>
+</div>
+```
+3. Analitzem l’exemple
+
+    Getting started:
+    https://www.chartjs.org/docs/latest/getting-started/
+
+    Exemple polar chart:
+    https://www.chartjs.org/docs/latest/charts/polar.html
+
+Fixem-nos que en el getting started defineix tres elements:
+
+    - labels
+    - data
+    - config
+
+I per crear el gràfic crida a la classe Chart (inclosa a la llibreria) i li passa per paràmetre, el div on
+anirà el gràfic i la configuració.
+
+4. En el teu programa defineix 4 arrays noves.
+- arrayLabels
+- arrayDadesGraf
+- backgroundColor
+- borderColor
+
+5. A l’inici del programa, quan carregues les dades crea un array amb els labels, tingues en compte que ha de ser un array amb valors únics, és a dir, no poden estar repetits.
+
+6. Ara has de crear un array amb les dades que tindrà el gràfic. L’array arrayDadesGraf serà paral·lel a l’arrayLabels. És a dir, a la posició 0 d’arrayDadesGraf hi haurà la quantitat de pokemons d’aquest tipus.
+
+7. Pels colors, diferenciarem entre el color de fons i el border. El borderColor serà el color “sencer” sense opacitat. Pel backgroundColor utilitzarem el mateix color però amb opacitat. 
+
+    Genera un array de llargada arrayLabels.length pel color del border, fes que sigui un color aleatori. Per a fer-ho, genera un string con el següent "rgba(rrr,ggg,bbb)" on rrr, ggg i bbb siguin 3 números aleatoris entre 0 i 255. 
+    
+    Una vegada tinguis aquest array generat, agafa el string de cada posició i modifica-la per a que sigui rgba(rrr,ggg,bbb, 0.2)
+
+    Utilitza les funcions que hem treballat amb els strings per a fer-ho.
+8. Amb totes aquestes dades ja pots generar el gràfic
