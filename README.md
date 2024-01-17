@@ -90,3 +90,47 @@ anirà el gràfic i la configuració.
 
     Utilitza les funcions que hem treballat amb els strings per a fer-ho.
 8. Amb totes aquestes dades ja pots generar el gràfic
+
+## Part 2. Modifiquem les funcions per a que funcionin en arrays multidimensionals
+### forEach
+Modifica les funcions de loop per un forEach
+### Search
+Modificarem la funció search per a que a mida que anem escrivint en el camp de cerca ens vagi
+mostrant els diferents elements.
+
+1. Afegeix un input type text al teu codi html
+    ```
+    <input type="text" value="" id="txtSearch" />
+    ```
+2. Al js afegirem un esdeveniment que detecti cada vegada que escrivim dins el camp de text.
+    ```
+    let inputSearch = document.getElementById('txtSearch')
+    inputSearch.addEventListener('input', (e) => {
+        console.log(inputSearch.value)
+    });
+    ```
+    [Documentació](https://developer.mozilla.org/en-US/docs/Web/API/Element/input_event)
+
+    Fixa’t que a mida que vas escrivint, per consola hauries de veure la progressió del text.
+
+3. Crea una funció filter que filtri els elements del teu llistat en funció del que vagis escrivint al camp de text. Posteriorment mostra-ho al llistat.
+
+    Tingues en compte les majúscules i que no només busquem per l’inici de la paraula sinó si la paraula conté el substring de la cerca.
+    
+    Ex: “chu”
+
+    Sortida: [“Pikachu”, “Raichu”]
+
+### Order by
+Fixa’t que una vegada modifiques l’array a array multidimensional, si a la primera posició no hi tens el
+nom, aquesta ja no s’ordenarà alfabèticament. Per a fer-ho hem de modificar la funció sort.
+```
+arry.sort(function(a,b) {
+    return a[1] > b[1];
+});
+```
+Fixa’t que el que fa és comparar dos elements i tornar true o false en funció de la condició que li estiguem dient.
+
+A la taula que has creat, fes que els elements thead siguin clicables i que quan cliquis un s’ordeni ascendentment i si el tornes a clicar, descendentment.
+
+La imatge no ha de ser un element ordenable.
