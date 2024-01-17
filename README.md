@@ -91,7 +91,7 @@ anirà el gràfic i la configuració.
     Utilitza les funcions que hem treballat amb els strings per a fer-ho.
 8. Amb totes aquestes dades ja pots generar el gràfic
 
-## Part 2. Modifiquem les funcions per a que funcionin en arrays multidimensionals
+## Part 3. Modifiquem les funcions per a que funcionin en arrays multidimensionals
 ### forEach
 Modifica les funcions de loop per un forEach
 ### Search
