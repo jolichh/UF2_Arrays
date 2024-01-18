@@ -82,6 +82,7 @@ let objetoPokemonSinKg = new Array();
 let valorLlista = "pokemon";
 
 let elGrafico;
+let flecha = true; //gestionará el switch para ordenar
 
 function sinKg() {
 	objetoPokemonSinKg = [...objetoPokemonArray];
@@ -93,6 +94,9 @@ function sinKg() {
 // 	console.log("sinKG weight: "+ objetoPokemonSinKg[3].weight);
 }
 function asignarValorLista(dato) {
+	if (elGrafico != null) {
+		elGrafico.destroy();
+	}
 	valorLlista = dato;
 	console.log("valor llista: "+valorLlista);
 	if (dato == "pokemon") {
@@ -114,6 +118,9 @@ function asignarValorLista(dato) {
 inicialitzaPagina();
 //carga base datos y carga la pagina
 function inicialitzaPagina() {	
+	if (elGrafico != null) {
+		elGrafico.destroy();
+	}
 	// POKEMONS
 	fetch("js/data/pokemon.json")
 	.then(function(response) { return response.json()})
@@ -211,10 +218,11 @@ function cargarGrafic() {
 		obj.forEach(element => {
 			for (let i= 0; i<element.genres.length; i++){
 				if (!objGrafic.includes(element.genres[i])) {
-					objGrafic.push(element.type[i]);
+					objGrafic.push(element.type);
 				}
 			}
 		});
+		console.log("objGrafic pelis: "+objGrafic);
 	}
 	else if (valorLlista == 'meteorits') {
 		obj = [...objetoMeteoritArray];
@@ -277,7 +285,7 @@ function recargaPagina() {
 	location.reload();
 }
 
-//ordena ascendente o descendente 
+//ordena ascendente o descendente
 function orderList(orden) {
 	pokeOrdenado = [...objetoPokemonArray];
 	muniOrdenado = [...objetoMunicipiArray];
@@ -357,7 +365,10 @@ function orderList(orden) {
 		console.log("falla el tipo de orden al ordenar");
 	}	
 }
-
+//ordena ascendente o descendente segun lo que se indique en el parametro
+function orderBy(param) {
+	console.log("HAY que implementar orderBy: "+param);
+}
 
 // let inputSearch = document.getElementById('txtSearch');
 
@@ -365,7 +376,7 @@ function orderList(orden) {
 // 	console.log(inputSearch.value);
 // });
 
-//busqueda per coincidencia de nom
+//busqueda per coincidencia de nom ESTA VERSION NO SE USA
 function searchList() {
 	pokeBuscar = [...objetoPokemonArray];
 	muniBuscar = [...objetoMunicipiArray];
@@ -409,6 +420,7 @@ function searchList() {
 	}
 	printList(cumpleCondicion);	
 }
+//busqueda per coincidencia de nom
 function searchListLive(condicion) {
 	pokeBuscar = [...objetoPokemonArray];
 	muniBuscar = [...objetoMunicipiArray];
@@ -511,7 +523,7 @@ function printList(lista) {
 
 	//asignar titulos de la tabla
 	if (valorLlista === "pokemon") {
-		tabla += `<td>#</td>`;
+		tabla += `<td>#<button onclick="orderBy('id')">order</button></td>`;
 		tabla += `<td>image</td>`;
 		tabla += `<td>name</td>`;
 		tabla += `<td>weight</td>`;
