@@ -229,46 +229,49 @@ function cargarGrafic() {
 		console.log("Algo ha ido mal calculando el grafico");
 	}
 
-	//sacar datos
-	console.log("veces que entra a recorrer la objetos tabla "+obj.length);	
-	for (let i = 0; i<arrayLabels.length; i++) {
-		arrayDadesGraf[i] = 0;
-		obj.forEach(tipo => {
-			if (tipo.type.includes(arrayLabels[i])) {
-				arrayDadesGraf[i] = arrayDadesGraf[i]+ 1;
-			}
+	//de momento solo hay grafico para tabla pokemon
+	if (valorLlista == 'pokemon') {
+		//sacar datos
+		console.log("veces que entra a recorrer la objetos tabla "+obj.length);	
+		for (let i = 0; i<arrayLabels.length; i++) {
+			arrayDadesGraf[i] = 0;
+			obj.forEach(tipo => {
+				if (tipo.type.includes(arrayLabels[i])) {
+					arrayDadesGraf[i] = arrayDadesGraf[i]+ 1;
+				}
+			})
+		} 
+
+		//assignar color para cada etiqueta
+		arrayLabels.forEach(element=> {
+			let rrr = Math.floor(Math.random()*256);
+			let ggg = Math.floor(Math.random()*256);
+			let bbb = Math.floor(Math.random()*256);
+
+			backgroundColor.push('rgba('+rrr+','+ggg+','+bbb+', 0.2)');
+			borderColor.push("rgba("+rrr+','+ggg+','+bbb+')');
 		})
-	} 
+		
+		const ctx = document.getElementById('myChart');
+		const data = {
+			labels: arrayLabels,
+			datasets: [{
+				label: nomLabel,
+				data: arrayDadesGraf,
+				backgroundColor: backgroundColor,
+				borderColor: borderColor
+			}]		
+		};
 
-	//assignar color para cada etiqueta
-	arrayLabels.forEach(element=> {
-		let rrr = Math.floor(Math.random()*256);
-		let ggg = Math.floor(Math.random()*256);
-		let bbb = Math.floor(Math.random()*256);
-
-		backgroundColor.push('rgba('+rrr+','+ggg+','+bbb+', 0.2)');
-		borderColor.push("rgba("+rrr+','+ggg+','+bbb+')');
-	})
-	
-	const ctx = document.getElementById('myChart');
-	const data = {
-		labels: arrayLabels,
-		datasets: [{
-			label: nomLabel,
-			data: arrayDadesGraf,
-			backgroundColor: backgroundColor,
-			borderColor: borderColor
-		}]		
-	};
-
-	const config = {
-		type: 'polarArea',
-		data: data,
-		options: {}
-	};
-	console.log(config);
-	
-	elGrafico = new Chart(ctx, config);	
+		const config = {
+			type: 'polarArea',
+			data: data,
+			options: {}
+		};
+		console.log(config);
+		
+		elGrafico = new Chart(ctx, config);	
+	}
 }
 function recargaPagina() {
 	location.reload();
