@@ -81,6 +81,8 @@ let col = 4;
 let objetoPokemonSinKg = new Array();
 let valorLlista = "pokemon";
 
+let elGrafico;
+
 function sinKg() {
 	objetoPokemonSinKg = [...objetoPokemonArray];
 	objetoPokemonSinKg.forEach(element => {
@@ -169,7 +171,7 @@ function inicialitzaPagina() {
 		console.log(err);
 	});
 }
-function cargarGrafic() {
+function cargarGrafic() {	
 	//mi chart
 	let arrayLabels = new Array();
 	let arrayDadesGraf = new Array();
@@ -177,6 +179,7 @@ function cargarGrafic() {
 	let borderColor = new Array();
 	let nomLabel = "";
 
+	
 	console.log("valor llista al cargar Grafic: "+ valorLlista);
 	//cargar labels, datos y colores para el grafico
 	if (valorLlista == 'pokemon') {
@@ -264,7 +267,8 @@ function cargarGrafic() {
 		options: {}
 	};
 	console.log(config);
-	new Chart(ctx, config);	
+	
+	elGrafico = new Chart(ctx, config);	
 }
 function recargaPagina() {
 	location.reload();
@@ -351,6 +355,13 @@ function orderList(orden) {
 	}	
 }
 
+
+// let inputSearch = document.getElementById('txtSearch');
+
+// inputSearch.addEventListener('input', (e) => {
+// 	console.log(inputSearch.value);
+// });
+
 //busqueda per coincidencia de nom
 function searchList() {
 	pokeBuscar = [...objetoPokemonArray];
@@ -395,7 +406,53 @@ function searchList() {
 	}
 	printList(cumpleCondicion);	
 }
+function searchListLive(condicion) {
+	pokeBuscar = [...objetoPokemonArray];
+	muniBuscar = [...objetoMunicipiArray];
+	peliBuscar = [...objetoPeliculaArray];
+	meteoBuscar = [...objetoMeteoritArray];
+	let cumpleCondicion = new Array();
 
+	let condicionBusqueda = condicion;
+	condicionBusqueda.toLocaleLowerCase();
+		
+	if (valorLlista === "pokemon") {
+		pokeBuscar.forEach(element => {
+			if(element.name.toLocaleLowerCase().includes(condicionBusqueda)) {
+				cumpleCondicion.push(element);
+			}
+		});
+	} 
+	else if (valorLlista === "municipi") {
+		muniBuscar.forEach(element => {
+			if(element.municipi_nom.toLocaleLowerCase().includes(condicionBusqueda)) {
+				cumpleCondicion.push(element);
+			}
+		});
+	} 
+	else if (valorLlista === "pelicules") {
+		peliBuscar.forEach(element => {
+			if(element.title.toLocaleLowerCase().includes(condicionBusqueda)) {
+				cumpleCondicion.push(element);
+			}
+		});
+	} 
+	else if (valorLlista === "meteorits") {
+		meteoBuscar.forEach(element => {
+			if(element.name.toLocaleLowerCase().includes(condicionBusqueda)) {
+				cumpleCondicion.push(element);
+			}
+		});
+	} 
+	else {
+		tabla += `<td>Algo ha ido mal cargando la lista...</td>`;
+	}
+	//antes de print tabla limpia el grafico
+	if (elGrafico != null) {
+		elGrafico.destroy();
+	}
+	printList(cumpleCondicion);	
+}
 function calcMitjana() {
 	let mitjana = 0;
 	let obj = new Array();

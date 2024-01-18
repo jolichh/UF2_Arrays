@@ -23,8 +23,8 @@
 		<button onclick="recargaPagina()">Inicialitza tot de nou</button>
 		<button onclick="orderList('asc')">Ordenar ascendent</button>
 		<button onclick="orderList('desc')">Ordenar descendent</button>
-		<button onclick="searchList()">Buscar</button>
-		<button onclick="calcMitjana()">Mitjana del valor afegit</button>
+		<button onclick="searchList()">Buscar</button>		<button onclick="calcMitjana()">Mitjana del valor afegit</button>
+		<input type="text" value="" id="txtSearch" />
 		<div id="container-tabla"></div>
 		<div>
 			<canvas id="myChart"></canvas>
@@ -32,7 +32,13 @@
 		  
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		
-		  
+		<script>
+		let inputSearch = document.getElementById('txtSearch')
+		inputSearch.addEventListener('input', (e) => {
+			console.log(inputSearch.value);
+			searchListLive(inputSearch.value);
+		});
+		</script>
 	</div>
 </body>
 </html>
