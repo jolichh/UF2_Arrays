@@ -80,9 +80,9 @@ let objetoMeteoritArray = new Array();
 let col = 4;
 let objetoPokemonSinKg = new Array();
 let valorLlista = "pokemon";
-
+let url_img_flecha = "https://cdn-icons-png.flaticon.com/512/57/57032.png";
 let elGrafico;
-let flecha = true; //gestionará el switch para ordenar
+let orden = 'asc'; //gestionará el switch para ordenar
 
 function sinKg() {
 	objetoPokemonSinKg = [...objetoPokemonArray];
@@ -131,9 +131,10 @@ function inicialitzaPagina() {
 			objetoPokemonArray.push(element);
 		})
 		//muestra tabla inicial
-		printList(objetoPokemonArray);
+		//printList(objetoPokemonArray);
 		//sinKg debe ir dentro para que cargue bien el orden de datos por el async
 		sinKg(); 
+		printList(objetoPokemonSinKg)
 	})
 	.catch(function (err) {
 		console.log(err);
@@ -202,40 +203,6 @@ function cargarGrafic() {
 		});
 		console.log(arrayLabels.length+" tipus de pokemon");
 	} 
-	else if (valorLlista == 'municipi') {		
-		nomLabel = "Comarca de municipi";
-		obj = [...objetoMunicipiArray];
-		obj.forEach(element => {
-			if (!arrayLabels.includes(element.comarca_nom)) {
-				arrayLabels.push(element.comarca_nom);
-			}
-		});
-		console.log(arrayLabels.length+" comarques totals");
-	}
-	else if (valorLlista == 'pelicules') {
-		obj = [...objetoPeliculaArray];
-		objGrafic = new Array();
-		obj.forEach(element => {
-			for (let i= 0; i<element.genres.length; i++){
-				if (!objGrafic.includes(element.genres[i])) {
-					objGrafic.push(element.type);
-				}
-			}
-		});
-		console.log("objGrafic pelis: "+objGrafic);
-	}
-	else if (valorLlista == 'meteorits') {
-		obj = [...objetoMeteoritArray];
-		objGrafic = new Array();
-		obj.forEach(element => {
-			if (!objGrafic.includes(element.recclass)) {
-				objGrafic.push(element.recclass);
-			}
-		});
-	}
-	else {
-		console.log("Algo ha ido mal calculando el grafico");
-	}
 
 	//de momento solo hay grafico para tabla pokemon
 	if (valorLlista == 'pokemon') {
@@ -275,9 +242,7 @@ function cargarGrafic() {
 			type: 'polarArea',
 			data: data,
 			options: {}
-		};
-		console.log(config);
-		
+		};	
 		elGrafico = new Chart(ctx, config);	
 	}
 }
@@ -365,17 +330,60 @@ function orderList(orden) {
 		console.log("falla el tipo de orden al ordenar");
 	}	
 }
-//ordena ascendente o descendente segun lo que se indique en el parametro
+//Asigna la tabla y llama al order sergun columna
 function orderBy(param) {
-	console.log("HAY que implementar orderBy: "+param);
+	let arrayTabla;
+	if (valorLlista == 'pokemon') {
+		arrayTabla = [...objetoPokemonArray];
+	}
+	else if (valorLlista == 'municipi') {
+		arrayTabla = [...objetoMunicipiArray];
+	} 
+	else if (valorLlista == 'pelicules') {
+		arrayTabla = [...objetoPeliculaArray];
+	} 
+	else if (valorLlista == 'meteorits') {
+		arrayTabla = [...objetoMeteoritArray];
+	}	
+	orderByTabla(arrayTabla, param);
+}
+function swithCaseOrden() {
+	switch (orden) {
+		case 'asc':
+			orden = 'desc';
+			break;
+		case 'desc':
+			orden = 'asc';
+			break;
+	}
 }
 
-// let inputSearch = document.getElementById('txtSearch');
+//ordena la tabla segun el array y valor a ordenar
+function orderByTabla(aOrdenar, tipo) {
+	swithCaseOrden();
+	if (orden == 'asc') {
+		aOrdenar.sort(function(a,b){ 			
+			if (a[tipo] > b[tipo]) { return 1};	//si es mayor +1
+			if (a[tipo] < b[tipo]) { return -1};	//es menor -1
+			return 0; //si es igual ni suma ni resta
+		});			
+	}
+	else if (orden == 'desc') {
+		aOrdenar.sort(function(a,b){ 
+			if (a[tipo] < b[tipo]) { return 1};	//si es menor +1
+			if (a[tipo] > b[tipo]) { return -1};	//es mayor -1
+			return 0; //si es igual ni suma ni resta
+		});
+	} 
+	else {
+		console.log("falla al ordenar la tabla");
+	}
 
-// inputSearch.addEventListener('input', (e) => {
-// 	console.log(inputSearch.value);
-// });
-
+	if (elGrafico != null) {
+		elGrafico.destroy();
+	}
+	printList(aOrdenar);
+}
 //busqueda per coincidencia de nom ESTA VERSION NO SE USA
 function searchList() {
 	pokeBuscar = [...objetoPokemonArray];
@@ -514,37 +522,36 @@ function calcMitjana() {
 		console.log("Algo ha ido mal en calcMitjana");
 	}
 }
-
 //crea la tabla y la muestra en el html
 function printList(lista) {
 	let div = document.getElementById("container-tabla");
-	let tabla = `<table id="tabla">`;
+	let tabla = `<table class="tabla">`;
 	tabla += `<tr>`;
 
 	//asignar titulos de la tabla
 	if (valorLlista === "pokemon") {
-		tabla += `<td>#<button onclick="orderBy('id')">order</button></td>`;
+		tabla += `<td># <img src="${url_img_flecha}" onclick="orderBy('id')" width="15px"></td>`;
 		tabla += `<td>image</td>`;
-		tabla += `<td>name</td>`;
-		tabla += `<td>weight</td>`;
+		tabla += `<td>name <img src="${url_img_flecha}" width="15px" onclick="orderBy('name')"></td>`;
+		tabla += `<td>weight <img src="${url_img_flecha}" width="15px" onclick="orderBy('weight')"></td>`;
 	}
 	if (valorLlista === "municipi") {
-		tabla += `<td>CP</td>`;
+		tabla += `<td>INE <img src="${url_img_flecha}" width="15px" onclick="orderBy('ine')"></td>`;
 		tabla += `<td>image</td>`;
-		tabla += `<td>name</td>`;
-		tabla += `<td>Habitants</td>`;	
+		tabla += `<td>name <img src="${url_img_flecha}" width="15px" onclick="orderBy('municipi_nom')"></td>`;
+		tabla += `<td>Habitants <img src="${url_img_flecha}" width="15px" onclick="orderBy('nombre_habitants')"></td>`;	
 	}
 	if (valorLlista === "pelicules") {
-		tabla += `<td>Title</td>`;
+		tabla += `<td>Title <img src="${url_img_flecha}" width="15px" onclick="orderBy('title')"></td>`;
 		tabla += `<td>image</td>`;
-		tabla += `<td>year</td>`;
-		tabla += `<td>Rating</td>`;	
+		tabla += `<td>year <img src="${url_img_flecha}" width="15px" onclick="orderBy('year')"></td>`;
+		tabla += `<td>Rating <img src="${url_img_flecha}" width="15px" onclick="orderBy('rating')"></td>`;	
 	}
 	if (valorLlista === "meteorits") {
-		tabla += `<td>Id</td>`;
-		tabla += `<td>Recclass</td>`;
-		tabla += `<td>Name</td>`;
-		tabla += `<td>Mass</td>`;	
+		tabla += `<td>Id <img src="${url_img_flecha}" width="15px" onclick="orderBy('id')"></td>`;
+		tabla += `<td>Recclass <img src="${url_img_flecha}" width="15px" onclick="orderBy('recclass')"></td>`;
+		tabla += `<td>Name <img src="${url_img_flecha}" width="15px" onclick="orderBy('name')"></td>`;
+		tabla += `<td>Mass <img src="${url_img_flecha}" width="15px" onclick="orderBy('mass')"></td>`;	
 	}
 	
 	tabla += `<tr>`;
@@ -554,10 +561,10 @@ function printList(lista) {
 			tabla += `<td>${lista[i].id}  </td>`;
 			tabla += `<td><img src="${lista[i].img}"></td>`;
 			tabla += `<td>${lista[i].name}</td>`;
-			tabla += `<td>${lista[i].weight}</td>`;		
+			tabla += `<td>${lista[i].weight} kg</td>`;		
 		} 
 		else if (valorLlista === "municipi") {
-			tabla += `<td>${lista[i].ine}  </td>`;
+			tabla += `<td>${lista[i].ine} </td>`;
 			tabla += `<td><img src="${lista[i].municipi_vista}"></td>`;
 			tabla += `<td>${lista[i].municipi_nom}</td>`;
 			tabla += `<td>${lista[i].nombre_habitants}</td>`;		
@@ -581,7 +588,6 @@ function printList(lista) {
 	tabla += `</tr>`;
 	tabla += `</table>`;
 	div.innerHTML = tabla;
-	console.log("Cargar grafic desde printList");
 	cargarGrafic();
 }
 
