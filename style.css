@@ -1,5 +1,9 @@
+#container {
+    margin: 20px;
+}
 table {
     width: 65vw;
+    margin-top: 20px;
 }
 td {
     width: fit-content;
@@ -9,4 +13,12 @@ td {
 img {
     max-width: 12rem;
     max-height: 12rem;
+}
+select, button, input {
+    padding: 5px;
+    margin: 2px;
+}
+
+.img_:hover {
+    cursor: pointer;
 }
