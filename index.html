@@ -22,13 +22,13 @@
 		<button onclick="recargaPagina()">Inicialitza tot de nou</button>
 		<button onclick="orderList('asc')">Ordenar ascendent</button>
 		<button onclick="orderList('desc')">Ordenar descendent</button>
-		<button onclick="searchList()">Buscar</button>
+		<!--<button onclick="searchList()">Buscar</button>-->
 		<button onclick="calcMitjana()">Mitjana del valor afegit</button>
-		<input type="text" value="" id="txtSearch" />
+		<input placeholder="Buscar" type="text" value="" id="txtSearch" />
 	
 
 		<div id="container-tabla"></div>
-		<div>
+		<div class="grafic">
 			<canvas id="myChart"></canvas>
 		</div>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

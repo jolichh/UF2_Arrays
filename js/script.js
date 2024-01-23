@@ -517,28 +517,28 @@ function printList(lista) {
 
 	//asignar titulos de la tabla
 	if (valorLlista === "pokemon") {
-		tabla += `<td># <img src="${url_img_flecha}" onclick="orderBy('id')" width="15px"></td>`;
+		tabla += `<td># <img class="img_"src="${url_img_flecha}" onclick="orderBy('id')" width="15px"></td>`;
 		tabla += `<td>image</td>`;
-		tabla += `<td>name <img src="${url_img_flecha}" width="15px" onclick="orderBy('name')"></td>`;
-		tabla += `<td>weight <img src="${url_img_flecha}" width="15px" onclick="orderBy('weight')"></td>`;
+		tabla += `<td>name <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('name')"></td>`;
+		tabla += `<td>weight <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('weight')"></td>`;
 	}
 	if (valorLlista === "municipi") {
-		tabla += `<td>INE <img src="${url_img_flecha}" width="15px" onclick="orderBy('ine')"></td>`;
+		tabla += `<td>INE <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('ine')"></td>`;
 		tabla += `<td>image</td>`;
-		tabla += `<td>name <img src="${url_img_flecha}" width="15px" onclick="orderBy('municipi_nom')"></td>`;
-		tabla += `<td>Habitants <img src="${url_img_flecha}" width="15px" onclick="orderBy('nombre_habitants')"></td>`;	
+		tabla += `<td>name <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('municipi_nom')"></td>`;
+		tabla += `<td>Habitants <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('nombre_habitants')"></td>`;	
 	}
 	if (valorLlista === "pelicules") {
-		tabla += `<td>Title <img src="${url_img_flecha}" width="15px" onclick="orderBy('title')"></td>`;
+		tabla += `<td>Title <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('title')"></td>`;
 		tabla += `<td>image</td>`;
-		tabla += `<td>year <img src="${url_img_flecha}" width="15px" onclick="orderBy('year')"></td>`;
-		tabla += `<td>Rating <img src="${url_img_flecha}" width="15px" onclick="orderBy('rating')"></td>`;	
+		tabla += `<td>year <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('year')"></td>`;
+		tabla += `<td>Rating <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('rating')"></td>`;	
 	}
 	if (valorLlista === "meteorits") {
-		tabla += `<td>Id <img src="${url_img_flecha}" width="15px" onclick="orderBy('id')"></td>`;
-		tabla += `<td>Recclass <img src="${url_img_flecha}" width="15px" onclick="orderBy('recclass')"></td>`;
-		tabla += `<td>Name <img src="${url_img_flecha}" width="15px" onclick="orderBy('name')"></td>`;
-		tabla += `<td>Mass <img src="${url_img_flecha}" width="15px" onclick="orderBy('mass')"></td>`;	
+		tabla += `<td>Id <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('id')"></td>`;
+		tabla += `<td>Recclass <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('recclass')"></td>`;
+		tabla += `<td>Name <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('name')"></td>`;
+		tabla += `<td>Mass <img class="img_" src="${url_img_flecha}" width="15px" onclick="orderBy('mass')"></td>`;	
 	}
 	
 	tabla += `<tr>`;
@@ -577,4 +577,3 @@ function printList(lista) {
 	div.innerHTML = tabla;
 	cargarGrafic();
 }
-
