@@ -22,32 +22,27 @@ async function fetchingData() {
 		const dataPokemon = await responsePokemon.json();
 		dades = dataPokemon.pokemon;
 		pokeArray.push(...dades.map(pokemon => pokemon.name));
-		console.log("Pokemons:", pokeArray.length);
+		//console.log("Pokemons:", pokeArray.length);
 
 		const responseMunicipis = await fetch("js/data/municipis.json");
 		const dataMunicipis = await responseMunicipis.json();
 		dades = dataMunicipis.elements;
 		muniArray.push(...dades.map(element => element.municipi_nom));
-		console.log("Municipis:", dades.length);
+		//console.log("Municipis:", dades.length);
 
 		const responseMeteorits = await fetch("js/data/earthMeteorites.json");
 		const dataMeteorits = await responseMeteorits.json();
 		dades = dataMeteorits;
 		meteoArray.push(...dades.map(meteorit => meteorit.name));
-		console.log("Meteorits 1:", dades[5].name);
+		//console.log("Meteorits 1:", dades[5].name);
 
 		const responseMovies = await fetch("js/data/movies.json");
 		const dataMovies = await responseMovies.json();
 		dades = dataMovies.movies;
 		peliArray.push(...dades.map(movie => movie.title));
-		console.log("Movies:", dades[8].title);
+		//console.log("Movies:", dades[8].title);
 
 		mostrarConsola();
-
-		//guarda una copia para las tablas
-		// objetoPokemonArray = [...pokeArray];
-		// inicialitzaPagina();
-		// printList(objetoPokemonArray);
 	} catch(error) {
 		console.log("Error en fetch data", error);
 	}
@@ -68,7 +63,7 @@ function mostrarConsola() {
 		Pel·licules: superArray.pelicules[index] || '',
 		EarthMeteorite: superArray.meteorits[index] || ''
 	}));
-	//console.table(tablaData);
+	console.table(tablaData);
 }
 
 // EXERCICI 1
@@ -80,19 +75,21 @@ let objetoMeteoritArray = new Array();
 let col = 4;
 let objetoPokemonSinKg = new Array();
 let valorLlista = "pokemon";
+let url_img_flecha = "https://cdn-icons-png.flaticon.com/512/57/57032.png";
+let elGrafico;
+let orden = 'asc'; //gestionará el switch para ordenar
 
 function sinKg() {
 	objetoPokemonSinKg = [...objetoPokemonArray];
 	objetoPokemonSinKg.forEach(element => {
 		element.weight = element.weight.substring(0, element.weight.length-3);
 	});
-// 	console.log(objetoPokemonSinKg[1]);
-// 	console.log("sinKG length: "+ objetoPokemonSinKg.length);
-// 	console.log("sinKG weight: "+ objetoPokemonSinKg[3].weight);
 }
 function asignarValorLista(dato) {
+	if (elGrafico != null) {
+		elGrafico.destroy();
+	}
 	valorLlista = dato;
-	console.log("valor llista: "+valorLlista);
 	if (dato == "pokemon") {
 		printList(objetoPokemonArray);
 	}
@@ -105,13 +102,15 @@ function asignarValorLista(dato) {
 	if (dato == "meteorits") {
 		printList(objetoMeteoritArray);
 	}
-	console.log("asignado "+dato);
 }
 
 // Part 1
 inicialitzaPagina();
 //carga base datos y carga la pagina
 function inicialitzaPagina() {	
+	if (elGrafico != null) {
+		elGrafico.destroy();
+	}
 	// POKEMONS
 	fetch("js/data/pokemon.json")
 	.then(function(response) { return response.json()})
@@ -121,10 +120,9 @@ function inicialitzaPagina() {
 		dades.forEach(element=>{
 			objetoPokemonArray.push(element);
 		})
-		//muestra tabla inicial
-		printList(objetoPokemonArray);
 		//sinKg debe ir dentro para que cargue bien el orden de datos por el async
 		sinKg(); 
+		printList(objetoPokemonSinKg)
 	})
 	.catch(function (err) {
 		console.log(err);
@@ -169,7 +167,7 @@ function inicialitzaPagina() {
 		console.log(err);
 	});
 }
-function cargarGrafic() {
+function cargarGrafic() {	
 	//mi chart
 	let arrayLabels = new Array();
 	let arrayDadesGraf = new Array();
@@ -177,7 +175,6 @@ function cargarGrafic() {
 	let borderColor = new Array();
 	let nomLabel = "";
 
-	console.log("valor llista al cargar Grafic: "+ valorLlista);
 	//cargar labels, datos y colores para el grafico
 	if (valorLlista == 'pokemon') {
 		nomLabel = "Tipus de pokemon";
@@ -190,87 +187,57 @@ function cargarGrafic() {
 				}
 			})		
 		});
-		console.log(arrayLabels.length+" tipus de pokemon");
 	} 
-	else if (valorLlista == 'municipi') {		
-		nomLabel = "Comarca de municipi";
-		obj = [...objetoMunicipiArray];
-		obj.forEach(element => {
-			if (!arrayLabels.includes(element.comarca_nom)) {
-				arrayLabels.push(element.comarca_nom);
-			}
-		});
-		console.log(arrayLabels.length+" comarques totals");
-	}
-	else if (valorLlista == 'pelicules') {
-		obj = [...objetoPeliculaArray];
-		objGrafic = new Array();
-		obj.forEach(element => {
-			for (let i= 0; i<element.genres.length; i++){
-				if (!objGrafic.includes(element.genres[i])) {
-					objGrafic.push(element.type[i]);
+
+	//de momento solo hay grafico para tabla pokemon
+	if (valorLlista == 'pokemon') {
+		//sacar datos
+		for (let i = 0; i<arrayLabels.length; i++) {
+			arrayDadesGraf[i] = 0;
+			obj.forEach(tipo => {
+				if (tipo.type.includes(arrayLabels[i])) {
+					arrayDadesGraf[i] = arrayDadesGraf[i]+ 1;
 				}
-			}
-		});
-	}
-	else if (valorLlista == 'meteorits') {
-		obj = [...objetoMeteoritArray];
-		objGrafic = new Array();
-		obj.forEach(element => {
-			if (!objGrafic.includes(element.recclass)) {
-				objGrafic.push(element.recclass);
-			}
-		});
-	}
-	else {
-		console.log("Algo ha ido mal calculando el grafico");
-	}
+			})
+		} 
 
-	//sacar datos
-	console.log("veces que entra a recorrer la objetos tabla "+obj.length);	
-	for (let i = 0; i<arrayLabels.length; i++) {
-		arrayDadesGraf[i] = 0;
-		obj.forEach(tipo => {
-			if (tipo.type.includes(arrayLabels[i])) {
-				arrayDadesGraf[i] = arrayDadesGraf[i]+ 1;
-			}
+		//assignar color para cada etiqueta
+		arrayLabels.forEach(element=> {
+			let rrr = Math.floor(Math.random()*256);
+			let ggg = Math.floor(Math.random()*256);
+			let bbb = Math.floor(Math.random()*256);
+
+			backgroundColor.push('rgba('+rrr+','+ggg+','+bbb+', 0.2)');
+			borderColor.push("rgba("+rrr+','+ggg+','+bbb+')');
 		})
-	} 
+		
+		const ctx = document.getElementById('myChart');
+		const data = {
+			labels: arrayLabels,
+			datasets: [{
+				label: nomLabel,
+				data: arrayDadesGraf,
+				backgroundColor: backgroundColor,
+				borderColor: borderColor
+			}]		
+		};
 
-	//assignar color para cada etiqueta
-	arrayLabels.forEach(element=> {
-		let rrr = Math.floor(Math.random()*256);
-		let ggg = Math.floor(Math.random()*256);
-		let bbb = Math.floor(Math.random()*256);
-
-		backgroundColor.push('rgba('+rrr+','+ggg+','+bbb+', 0.2)');
-		borderColor.push("rgba("+rrr+','+ggg+','+bbb+')');
-	})
-	
-	const ctx = document.getElementById('myChart');
-	const data = {
-		labels: arrayLabels,
-		datasets: [{
-			label: nomLabel,
-			data: arrayDadesGraf,
-			backgroundColor: backgroundColor,
-			borderColor: borderColor
-		}]		
-	};
-
-	const config = {
-		type: 'polarArea',
-		data: data,
-		options: {}
-	};
-	console.log(config);
-	new Chart(ctx, config);	
+		const config = {
+			type: 'polarArea',
+			data: data,
+			options: {}
+		};	
+		if (elGrafico != null) {
+			elGrafico.destroy();
+		}
+		elGrafico = new Chart(ctx, config);	
+	}
 }
 function recargaPagina() {
 	location.reload();
 }
 
-//ordena ascendente o descendente 
+//ordena ascendente o descendente
 function orderList(orden) {
 	pokeOrdenado = [...objetoPokemonArray];
 	muniOrdenado = [...objetoMunicipiArray];
@@ -350,8 +317,61 @@ function orderList(orden) {
 		console.log("falla el tipo de orden al ordenar");
 	}	
 }
+//Asigna la tabla y llama al order sergun columna
+function orderBy(param) {
+	let arrayTabla;
+	if (valorLlista == 'pokemon') {
+		arrayTabla = [...objetoPokemonArray];
+	}
+	else if (valorLlista == 'municipi') {
+		arrayTabla = [...objetoMunicipiArray];
+	} 
+	else if (valorLlista == 'pelicules') {
+		arrayTabla = [...objetoPeliculaArray];
+	} 
+	else if (valorLlista == 'meteorits') {
+		arrayTabla = [...objetoMeteoritArray];
+	}	
+	orderByTabla(arrayTabla, param);
+}
+function swithCaseOrden() {
+	switch (orden) {
+		case 'asc':
+			orden = 'desc';
+			break;
+		case 'desc':
+			orden = 'asc';
+			break;
+	}
+}
 
-//busqueda per coincidencia de nom
+//ordena la tabla segun el array y valor a ordenar
+function orderByTabla(aOrdenar, tipo) {
+	swithCaseOrden();
+	if (orden == 'asc') {
+		aOrdenar.sort(function(a,b){ 			
+			if (a[tipo] > b[tipo]) { return 1};	//si es mayor +1
+			if (a[tipo] < b[tipo]) { return -1};	//es menor -1
+			return 0; //si es igual ni suma ni resta
+		});			
+	}
+	else if (orden == 'desc') {
+		aOrdenar.sort(function(a,b){ 
+			if (a[tipo] < b[tipo]) { return 1};	//si es menor +1
+			if (a[tipo] > b[tipo]) { return -1};	//es mayor -1
+			return 0; //si es igual ni suma ni resta
+		});
+	} 
+	else {
+		console.log("falla al ordenar la tabla");
+	}
+
+	if (elGrafico != null) {
+		elGrafico.destroy();
+	}
+	printList(aOrdenar);
+}
+//busqueda per coincidencia de nom ESTA VERSION NO SE USA
 function searchList() {
 	pokeBuscar = [...objetoPokemonArray];
 	muniBuscar = [...objetoMunicipiArray];
@@ -395,7 +415,54 @@ function searchList() {
 	}
 	printList(cumpleCondicion);	
 }
+//busqueda per coincidencia de nom
+function searchListLive(condicion) {
+	pokeBuscar = [...objetoPokemonArray];
+	muniBuscar = [...objetoMunicipiArray];
+	peliBuscar = [...objetoPeliculaArray];
+	meteoBuscar = [...objetoMeteoritArray];
+	let cumpleCondicion = new Array();
 
+	let condicionBusqueda = condicion;
+	condicionBusqueda.toLocaleLowerCase();
+		
+	if (valorLlista === "pokemon") {
+		pokeBuscar.forEach(element => {
+			if(element.name.toLocaleLowerCase().includes(condicionBusqueda)) {
+				cumpleCondicion.push(element);
+			}
+		});
+	} 
+	else if (valorLlista === "municipi") {
+		muniBuscar.forEach(element => {
+			if(element.municipi_nom.toLocaleLowerCase().includes(condicionBusqueda)) {
+				cumpleCondicion.push(element);
+			}
+		});
+	} 
+	else if (valorLlista === "pelicules") {
+		peliBuscar.forEach(element => {
+			if(element.title.toLocaleLowerCase().includes(condicionBusqueda)) {
+				cumpleCondicion.push(element);
+			}
+		});
+	} 
+	else if (valorLlista === "meteorits") {
+		meteoBuscar.forEach(element => {
+			if(element.name.toLocaleLowerCase().includes(condicionBusqueda)) {
+				cumpleCondicion.push(element);
+			}
+		});
+	} 
+	else {
+		tabla += `<td>Algo ha ido mal cargando la lista...</td>`;
+	}
+	//antes de print tabla limpia el grafico
+	if (elGrafico != null) {
+		elGrafico.destroy();
+	}
+	printList(cumpleCondicion);	
+}
 function calcMitjana() {
 	let mitjana = 0;
 	let obj = new Array();
@@ -442,37 +509,36 @@ function calcMitjana() {
 		console.log("Algo ha ido mal en calcMitjana");
 	}
 }
-
 //crea la tabla y la muestra en el html
 function printList(lista) {
 	let div = document.getElementById("container-tabla");
-	let tabla = `<table id="tabla">`;
+	let tabla = `<table class="tabla">`;
 	tabla += `<tr>`;
 
 	//asignar titulos de la tabla
 	if (valorLlista === "pokemon") {
-		tabla += `<td>#</td>`;
+		tabla += `<td># <img src="${url_img_flecha}" onclick="orderBy('id')" width="15px"></td>`;
 		tabla += `<td>image</td>`;
-		tabla += `<td>name</td>`;
-		tabla += `<td>weight</td>`;
+		tabla += `<td>name <img src="${url_img_flecha}" width="15px" onclick="orderBy('name')"></td>`;
+		tabla += `<td>weight <img src="${url_img_flecha}" width="15px" onclick="orderBy('weight')"></td>`;
 	}
 	if (valorLlista === "municipi") {
-		tabla += `<td>CP</td>`;
+		tabla += `<td>INE <img src="${url_img_flecha}" width="15px" onclick="orderBy('ine')"></td>`;
 		tabla += `<td>image</td>`;
-		tabla += `<td>name</td>`;
-		tabla += `<td>Habitants</td>`;	
+		tabla += `<td>name <img src="${url_img_flecha}" width="15px" onclick="orderBy('municipi_nom')"></td>`;
+		tabla += `<td>Habitants <img src="${url_img_flecha}" width="15px" onclick="orderBy('nombre_habitants')"></td>`;	
 	}
 	if (valorLlista === "pelicules") {
-		tabla += `<td>Title</td>`;
+		tabla += `<td>Title <img src="${url_img_flecha}" width="15px" onclick="orderBy('title')"></td>`;
 		tabla += `<td>image</td>`;
-		tabla += `<td>year</td>`;
-		tabla += `<td>Rating</td>`;	
+		tabla += `<td>year <img src="${url_img_flecha}" width="15px" onclick="orderBy('year')"></td>`;
+		tabla += `<td>Rating <img src="${url_img_flecha}" width="15px" onclick="orderBy('rating')"></td>`;	
 	}
 	if (valorLlista === "meteorits") {
-		tabla += `<td>Id</td>`;
-		tabla += `<td>Recclass</td>`;
-		tabla += `<td>Name</td>`;
-		tabla += `<td>Mass</td>`;	
+		tabla += `<td>Id <img src="${url_img_flecha}" width="15px" onclick="orderBy('id')"></td>`;
+		tabla += `<td>Recclass <img src="${url_img_flecha}" width="15px" onclick="orderBy('recclass')"></td>`;
+		tabla += `<td>Name <img src="${url_img_flecha}" width="15px" onclick="orderBy('name')"></td>`;
+		tabla += `<td>Mass <img src="${url_img_flecha}" width="15px" onclick="orderBy('mass')"></td>`;	
 	}
 	
 	tabla += `<tr>`;
@@ -482,10 +548,10 @@ function printList(lista) {
 			tabla += `<td>${lista[i].id}  </td>`;
 			tabla += `<td><img src="${lista[i].img}"></td>`;
 			tabla += `<td>${lista[i].name}</td>`;
-			tabla += `<td>${lista[i].weight}</td>`;		
+			tabla += `<td>${lista[i].weight} kg</td>`;		
 		} 
 		else if (valorLlista === "municipi") {
-			tabla += `<td>${lista[i].ine}  </td>`;
+			tabla += `<td>${lista[i].ine} </td>`;
 			tabla += `<td><img src="${lista[i].municipi_vista}"></td>`;
 			tabla += `<td>${lista[i].municipi_nom}</td>`;
 			tabla += `<td>${lista[i].nombre_habitants}</td>`;		
@@ -509,7 +575,6 @@ function printList(lista) {
 	tabla += `</tr>`;
 	tabla += `</table>`;
 	div.innerHTML = tabla;
-	console.log("Cargar grafic desde printList");
 	cargarGrafic();
 }
 

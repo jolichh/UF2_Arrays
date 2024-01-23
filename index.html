@@ -12,7 +12,6 @@
 </head>
 <body>
 	<div id="container">
-
 		<select id="tipoLista" onchange="asignarValorLista(this.value)">
 			<option value="pokemon" selected>Pokemon</option>
 			<option value="municipi">Municipi</option>
@@ -25,14 +24,21 @@
 		<button onclick="orderList('desc')">Ordenar descendent</button>
 		<button onclick="searchList()">Buscar</button>
 		<button onclick="calcMitjana()">Mitjana del valor afegit</button>
+		<input type="text" value="" id="txtSearch" />
+	
+
 		<div id="container-tabla"></div>
 		<div>
 			<canvas id="myChart"></canvas>
 		</div>
-		  
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-		
-		  
+		<script>
+		let inputSearch = document.getElementById('txtSearch')
+		inputSearch.addEventListener('input', (e) => {
+			console.log(inputSearch.value);
+			searchListLive(inputSearch.value);
+		});
+		</script>
 	</div>
 </body>
 </html>
