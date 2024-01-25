@@ -47,7 +47,7 @@ async function fetchingData() {
 		console.log("Error en fetch data", error);
 	}
 }
-//RECUERDA DESCOMENTAR AQUI!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 function mostrarConsola() {
 	maxLength = Math.max(
 		superArray.pokemon.length,
@@ -64,6 +64,7 @@ function mostrarConsola() {
 		EarthMeteorite: superArray.meteorits[index] || ''
 	}));
 	console.table(tablaData);
+	convertirArray();
 }
 
 // EXERCICI 1
@@ -122,7 +123,7 @@ function inicialitzaPagina() {
 		})
 		//sinKg debe ir dentro para que cargue bien el orden de datos por el async
 		sinKg(); 
-		printList(objetoPokemonSinKg)
+		printList(objetoPokemonSinKg);
 	})
 	.catch(function (err) {
 		console.log(err);
@@ -576,4 +577,22 @@ function printList(lista) {
 	tabla += `</table>`;
 	div.innerHTML = tabla;
 	cargarGrafic();
+}
+
+
+//Transformant array d'objectes a array d'array
+//usando data del fetching exercici 1
+//Com les anteriors son arrays d'objectes, les pasarem a array d'arrays
+function convertirArray() {
+
+	const arrayDeArraysPokemon = objetoPokemonArray.map(objeto => Object.values(objeto));
+	const arrayDeArraysMunicipi = objetoMunicipiArray.map(objeto => Object.values(objeto));
+	const arrayDeArraysPelicula = objetoPeliculaArray.map(objeto => Object.values(objeto));
+	const arrayDeArraysMeteorit = objetoMeteoritArray.map(objeto => Object.values(objeto));
+
+	console.log("Transformació de array-objects:");
+	console.log("   ARRAY pokemon posició 3: "+arrayDeArraysPokemon[2]);
+	console.log("   ARRAY municipi posició 1: "+arrayDeArraysMunicipi[0]);
+	console.log("   ARRAY pelicul·la posició 4: "+arrayDeArraysPelicula[3]);
+	console.log("   ARRAY meteorit posició 5: "+arrayDeArraysMeteorit[4]);
 }
