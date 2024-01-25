@@ -134,3 +134,6 @@ Fixa’t que el que fa és comparar dos elements i tornar true o false en funci�
 A la taula que has creat, fes que els elements thead siguin clicables i que quan cliquis un s’ordeni ascendentment i si el tornes a clicar, descendentment.
 
 La imatge no ha de ser un element ordenable.
+
+## Part 4. Objectes
+Modifica l'array multidimensional per a que sigui un array d'objectes amb els atributs que necessitis.
